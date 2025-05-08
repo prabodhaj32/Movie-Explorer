@@ -1,21 +1,24 @@
-// components/Favorites.jsx
-import React, { useContext } from 'react';
-import { Grid, Typography } from '@mui/material';
-import { MovieContext } from '../context/MovieContext';
-import MovieCard from './MovieCard';
+import React, { useContext } from "react";
+import { Grid, Typography } from "@mui/material";
+import MovieCard from "../components/MovieCard";
+import { MovieContext } from "../context/MovieContext";
 
 const Favorites = () => {
   const { favorites } = useContext(MovieContext);
 
   return (
-    <>
-      <Typography variant="h5" sx={{ m: 2 }}>My Favorites</Typography>
-      <Grid container>
+    <div>
+      <Typography variant="h4" mb={3}>
+        ❤️ Favorite Movies
+      </Typography>
+      <Grid container spacing={2}>
         {favorites.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} />
+          <Grid item xs={12} sm={6} md={3} key={movie.id}>
+            <MovieCard movie={movie} />
+          </Grid>
         ))}
       </Grid>
-    </>
+    </div>
   );
 };
 

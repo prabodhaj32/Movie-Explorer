@@ -1,14 +1,31 @@
 // src/utils/api.js
 import axios from "axios";
 
-const API_KEY = "65fe9553feb5be3d160d54c833e64294"; // Replace with your actual TMDb API key
+const API_KEY = "65fe9553feb5be3d160d54c833e64294"; // Replace with your actual API key
 const BASE_URL = "https://api.themoviedb.org/3";
 
+// Axios instance with base URL and default params
+const tmdb = axios.create({
+  baseURL: BASE_URL,
+  params: {
+    api_key: API_KEY,
+  },
+});
+
+// Fetch trending movies of the week
 export const fetchTrending = () =>
-  axios.get(`${BASE_URL}/trending/movie/week?api_key=${API_KEY}`);
+  tmdb.get("/trending/movie/week");
 
+// Search movies by query
 export const searchMovies = (query) =>
-  axios.get(`${BASE_URL}/search/movie?query=${query}&api_key=${API_KEY}`);
+  tmdb.get("/search/movie", {
+    params: { query },
+  });
 
+// Fetch movie details with credits (cast) and videos (trailers)
 export const fetchMovieDetails = (id) =>
-  axios.get(`${BASE_URL}/movie/${id}?api_key=${API_KEY}&append_to_response=credits,videos`);
+  tmdb.get(`/movie/${id}`, {
+    params: {
+      append_to_response: "credits,videos",
+    },
+  });

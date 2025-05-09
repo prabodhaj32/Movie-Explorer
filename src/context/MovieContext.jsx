@@ -22,7 +22,13 @@ export const MovieProvider = ({ children }) => {
           ? await searchMovies(searchQuery, page)
           : await fetchTrending(page);
         const newMovies = res.data.results;
-        setMovies((prev) => (page === 1 ? newMovies : [...prev, ...newMovies]));
+
+        setMovies((prev) => {
+          const combined = page === 1 ? newMovies : [...prev, ...newMovies];
+          const unique = Array.from(new Map(combined.map((m) => [m.id, m])).values());
+          return unique;
+        });
+
         setHasMore(newMovies.length > 0);
         setError(null);
       } catch (err) {
@@ -48,11 +54,7 @@ export const MovieProvider = ({ children }) => {
   const toggleFavorite = (movie) => {
     setFavorites((prev) => {
       const exists = prev.find((m) => m.id === movie.id);
-      if (exists) {
-        return prev.filter((m) => m.id !== movie.id);
-      } else {
-        return [...prev, movie];
-      }
+      return exists ? prev.filter((m) => m.id !== movie.id) : [...prev, movie];
     });
   };
 

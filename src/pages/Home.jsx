@@ -1,9 +1,7 @@
-// src/pages/Home.jsx
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import {
   Box,
   Typography,
-  Switch,
   Grid,
   CircularProgress,
 } from "@mui/material";
@@ -23,14 +21,6 @@ const Home = () => {
     searchQuery,
   } = useContext(MovieContext);
 
-  const [darkMode, setDarkMode] = useState(false);
-
-  const handleThemeToggle = () => {
-    setDarkMode((prev) => !prev);
-    document.body.style.backgroundColor = !darkMode ? "#121212" : "#fff";
-    document.body.style.color = !darkMode ? "#fff" : "#000";
-  };
-
   const fetchMore = () => {
     setPage((prevPage) => prevPage + 1);
   };
@@ -38,19 +28,8 @@ const Home = () => {
   return (
     <Box p={3}>
       {/* Header */}
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={3}
-      >
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="h4">🎬 Movie Explorer</Typography>
-        <Box display="flex" alignItems="center">
-          <Typography variant="body1" mr={1}>
-            Dark Mode
-          </Typography>
-          <Switch checked={darkMode} onChange={handleThemeToggle} />
-        </Box>
       </Box>
 
       {/* Search Bar */}
@@ -69,6 +48,7 @@ const Home = () => {
         dataLength={movies.length}
         next={fetchMore}
         hasMore={hasMore}
+        scrollThreshold={0.95}
         loader={<CircularProgress style={{ display: "block", margin: "20px auto" }} />}
         endMessage={
           <Typography align="center" mt={4}>
@@ -76,9 +56,19 @@ const Home = () => {
           </Typography>
         }
       >
-        <Grid container spacing={2}>
+        <Grid
+          container
+          spacing={2} // Use spacing for spacing between Grid items
+          sx={{ mt: 1 }}
+        >
           {movies.map((movie) => (
-            <Grid item xs={12} sm={6} md={3} key={movie.id}>
+            <Grid
+              key={movie.id}
+              sx={{
+                width: { xs: "100%", sm: "50%", md: "15%" }, // Define responsive widths for items
+                marginBottom: "5px", // Add bottom margin for spacing between rows
+              }}
+            >
               <MovieCard movie={movie} />
             </Grid>
           ))}

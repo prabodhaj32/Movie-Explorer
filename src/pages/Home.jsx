@@ -26,16 +26,17 @@ const Home = () => {
   };
 
   return (
+    
     <Box p={3}>
-      {/* Header */}
+      
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="h4">🎬 Movie Explorer</Typography>
       </Box>
 
-      {/* Search Bar */}
+      
       <SearchBar />
 
-      {/* Section Title */}
+     
       <Typography variant="h5" mt={4} mb={2}>
         {searchQuery ? "🔍 Search Results" : "🔥 Trending Movies"}
       </Typography>
@@ -58,15 +59,15 @@ const Home = () => {
       >
         <Grid
           container
-          spacing={2} // Use spacing for spacing between Grid items
+          spacing={2} 
           sx={{ mt: 1 }}
         >
           {movies.map((movie) => (
             <Grid
               key={movie.id}
               sx={{
-                width: { xs: "100%", sm: "50%", md: "15%" }, // Define responsive widths for items
-                marginBottom: "5px", // Add bottom margin for spacing between rows
+                width: { xs: "100%", sm: "50%", md: "15%" }, 
+                marginBottom: "5px", 
               }}
             >
               <MovieCard movie={movie} />

@@ -27,8 +27,10 @@ A responsive React app that allows users to explore trending movies, search titl
   - cd movie
   
 2. Install dependencies
+   -npm install
    
 4. Run the development server
+   -npm run dev
    
 6.  API Configuration
    - const API_KEY = "65fe9553feb5be3d160d54c833e64294"; //  API key

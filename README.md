@@ -1,12 +1,39 @@
-# React + Vite
+# Movie Explorer App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive React app that allows users to explore trending movies, search titles, and manage favorites.
 
-Currently, two official plugins are available:
+## Features
+- Login / Register with localStorage
+- Theme toggle (Light/Dark Mode)
+- View trending movies
+- Search movies
+- Favorite management
+- Protected routes
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+##  Tech Stack
+- React + Vite
+- Tailwind CSS + MUI
+- React Router
+- TMDb API
 
-## Expanding the ESLint configuration
+## Vercel Live Demo
+ Live App Here = https://movie-explorer-4o0fhit29-prabodha-jayawardhanas-projects.vercel.app
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Setup Instructions
+
+1. Clone the repository
+  - git clone https://gitlab.com/your-username/movie-explorer-app.git
+  - cd movie-explorer-app
+  
+2. Install dependencies
+   
+4. Run the development server
+   
+6.  API Configuration
+   - const API_KEY = "65fe9553feb5be3d160d54c833e64294"; //  API key
+   - onst BASE_URL = "https://api.themoviedb.org/3";
+
+5. Author
+  name -R.G.Prabodha Jayawardhana
+  gitlab-https://gitlab.com/prabodharg1954
+  github-https://github.com/prabodhaj32

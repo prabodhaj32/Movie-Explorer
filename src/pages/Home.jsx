@@ -54,7 +54,7 @@ const Home = () => {
         loader={<CircularProgress style={{ display: "block", margin: "20px auto" }} />} // Loading spinner
         endMessage={
           <Typography align="center" mt={4}>
-            🎉 You've reached the end!
+          You are reached the end!
           </Typography>
         }
       >

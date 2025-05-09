@@ -6,9 +6,9 @@ import {
   CircularProgress,
 } from "@mui/material";
 import InfiniteScroll from "react-infinite-scroll-component";
-import SearchBar from "../components/SearchBar"; // Search input component
-import MovieCard from "../components/MovieCard"; // Card display for each movie
-import { MovieContext } from "../context/MovieContext"; // Global movie state context
+import SearchBar from "../components/SearchBar"; 
+import MovieCard from "../components/MovieCard"; 
+import { MovieContext } from "../context/MovieContext"; 
 
 const Home = () => {
   // Extract state and actions from MovieContext

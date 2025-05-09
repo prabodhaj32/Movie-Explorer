@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom'; // Get URL parameters (e.g., movie ID)
-import { fetchMovieDetails } from '../utils/api'; // Custom API utility function
-import { Typography, Container, Chip, Box } from '@mui/material'; // MUI UI components
+import { useParams } from 'react-router-dom'; 
+import { fetchMovieDetails } from '../utils/api'; 
+import { Typography, Container, Chip, Box } from '@mui/material';
 
 const MoviePage = () => {
-  const { id } = useParams(); // Extract movie ID from route params
-  const [movie, setMovie] = useState(null); // Store full movie data
-  const [cast, setCast] = useState([]); // Store top 5 cast members
-  const [trailerUrl, setTrailerUrl] = useState(''); // Store trailer embed URL
+  const { id } = useParams(); 
+  const [movie, setMovie] = useState(null); 
+  const [cast, setCast] = useState([]); 
 
   // Fetch movie details when component mounts or 'id' changes
   useEffect(() => {
@@ -30,8 +29,8 @@ const MoviePage = () => {
       }
     };
 
-    fetchData(); // Call the async function
-  }, [id]); // Dependency array includes `id` to refetch when it changes
+    fetchData();
+  }, [id]);
 
   // Show loading state if movie data isn't ready
   if (!movie) return <div>Loading...</div>;

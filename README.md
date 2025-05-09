@@ -23,7 +23,8 @@ A responsive React app that allows users to explore trending movies, search titl
 
 1. Clone the repository
   - git clone = https://gitlab.com/prabodharg1954/Movie-Explorer.git
-  - cd movie-explorer-app
+    
+  - cd movie
   
 2. Install dependencies
    

@@ -6,11 +6,12 @@ import {
   CircularProgress,
 } from "@mui/material";
 import InfiniteScroll from "react-infinite-scroll-component";
-import SearchBar from "../components/SearchBar";
-import MovieCard from "../components/MovieCard";
-import { MovieContext } from "../context/MovieContext";
+import SearchBar from "../components/SearchBar"; // Search input component
+import MovieCard from "../components/MovieCard"; // Card display for each movie
+import { MovieContext } from "../context/MovieContext"; // Global movie state context
 
 const Home = () => {
+  // Extract state and actions from MovieContext
   const {
     movies,
     page,
@@ -21,42 +22,43 @@ const Home = () => {
     searchQuery,
   } = useContext(MovieContext);
 
+  // Function to load next page of movies when scrolling
   const fetchMore = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
   return (
-    
     <Box p={3}>
-      
+      {/* Header */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="h4">🎬 Movie Explorer</Typography>
       </Box>
 
-      
+      {/* Search bar for entering movie titles */}
       <SearchBar />
 
-     
+      {/* Section title based on search state */}
       <Typography variant="h5" mt={4} mb={2}>
         {searchQuery ? "🔍 Search Results" : "🔥 Trending Movies"}
       </Typography>
 
-      {/* Error */}
+      {/* Error display if fetching movies fails */}
       {error && <Typography color="error">{error}</Typography>}
 
-      {/* Infinite Scroll Grid */}
+      {/* Infinite scroll section for movies */}
       <InfiniteScroll
-        dataLength={movies.length}
-        next={fetchMore}
-        hasMore={hasMore}
-        scrollThreshold={0.95}
-        loader={<CircularProgress style={{ display: "block", margin: "20px auto" }} />}
+        dataLength={movies.length} // Current number of movies
+        next={fetchMore} // Function to call to load more movies
+        hasMore={hasMore} // Boolean: if more movies are available
+        scrollThreshold={0.95} // Fetch next page when 95% scrolled
+        loader={<CircularProgress style={{ display: "block", margin: "20px auto" }} />} // Loading spinner
         endMessage={
           <Typography align="center" mt={4}>
             🎉 You've reached the end!
           </Typography>
         }
       >
+        {/* Grid layout for movie cards */}
         <Grid
           container
           spacing={2} 
@@ -66,11 +68,11 @@ const Home = () => {
             <Grid
               key={movie.id}
               sx={{
-                width: { xs: "100%", sm: "50%", md: "15%" }, 
+                width: { xs: "100%", sm: "50%", md: "15%" }, // Responsive grid width
                 marginBottom: "5px", 
               }}
             >
-              <MovieCard movie={movie} />
+              <MovieCard movie={movie} /> {/* Individual movie card */}
             </Grid>
           ))}
         </Grid>

@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { fetchMovieDetails } from '../utils/api';
-import { Typography, Container, Chip, Box } from '@mui/material';
+import { useParams } from 'react-router-dom'; // Get URL parameters (e.g., movie ID)
+import { fetchMovieDetails } from '../utils/api'; // Custom API utility function
+import { Typography, Container, Chip, Box } from '@mui/material'; // MUI UI components
 
 const MoviePage = () => {
-  const { id } = useParams();
-  const [movie, setMovie] = useState(null);
-  const [cast, setCast] = useState([]);
-  const [trailerUrl, setTrailerUrl] = useState('');
+  const { id } = useParams(); // Extract movie ID from route params
+  const [movie, setMovie] = useState(null); // Store full movie data
+  const [cast, setCast] = useState([]); // Store top 5 cast members
+  const [trailerUrl, setTrailerUrl] = useState(''); // Store trailer embed URL
 
+  // Fetch movie details when component mounts or 'id' changes
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetchMovieDetails(id);
-        setMovie(res.data);
+        const res = await fetchMovieDetails(id); // Call TMDb API
+        setMovie(res.data); // Save movie data to state
 
-        // Get cast & trailer
+        // Extract top 5 cast members
         const credits = res.data.credits?.cast || [];
-        setCast(credits.slice(0, 5)); // show top 5 cast
+        setCast(credits.slice(0, 5));
 
+        // Extract YouTube trailer link
         const trailer = res.data.videos?.results.find(
           (v) => v.type === 'Trailer' && v.site === 'YouTube'
         );
@@ -27,29 +29,42 @@ const MoviePage = () => {
         console.error('Error fetching movie details:', error);
       }
     };
-    fetchData();
-  }, [id]);
 
+    fetchData(); // Call the async function
+  }, [id]); // Dependency array includes `id` to refetch when it changes
+
+  // Show loading state if movie data isn't ready
   if (!movie) return <div>Loading...</div>;
 
   return (
     <Container>
+      {/* Movie title */}
       <Typography variant="h4" gutterBottom>{movie.title}</Typography>
+
+      {/* Main content: poster + details */}
       <Box display="flex" gap={3}>
+        {/* Movie Poster */}
         <img
           src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
           alt={movie.title}
           style={{ width: '300px', borderRadius: 10 }}
         />
+
+        {/* Movie info */}
         <Box>
           <Typography variant="body1" gutterBottom>{movie.overview}</Typography>
+
+          {/* Genre list */}
           <Typography variant="body2" gutterBottom>
             Genres: {movie.genres.map((g) => g.name).join(', ')}
           </Typography>
+
+          {/* Release date */}
           <Typography variant="body2" gutterBottom>
             Release Date: {movie.release_date}
           </Typography>
 
+          {/* Top cast section */}
           <Typography variant="h6" mt={2}>Top Cast</Typography>
           <Box display="flex" flexWrap="wrap" gap={1}>
             {cast.map((actor) => (
@@ -59,6 +74,7 @@ const MoviePage = () => {
         </Box>
       </Box>
 
+      {/* Trailer section (if available) */}
       {trailerUrl && (
         <>
           <Typography variant="h6" mt={4}>Trailer</Typography>

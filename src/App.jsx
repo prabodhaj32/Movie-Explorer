@@ -27,7 +27,7 @@ const App = () => {
         <Route path="/" element={<Login />} />
          <Route path="/register" element={<Register />} />
         <Route path="/home" element={<Home darkMode={darkMode} />} />
-        <Route path="/movie/:id" element={<MoviePage darkMode={darkMode} />} />
+        <Route path="/movie/:id" element={<MoviePage />} />
         <Route path="/favorites" element={<Favorites darkMode={darkMode} />} />
       </Routes>
     </BrowserRouter>

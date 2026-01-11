@@ -1,90 +1,212 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import backgroundImage from "../assets/f2.jpg"; // Make sure the path is correct
 
 const Login = () => {
-  // State variables for username and password
-  const [username, setUsername] = useState("");
+  const [isLogin, setIsLogin] = useState(true);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
 
-  // React Router navigation hook
   const navigate = useNavigate();
 
-  // Handle form submission
   const handleLogin = (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
-
-    // Retrieve stored user credentials from localStorage
+    e.preventDefault();
     const stored = localStorage.getItem("userCredentials");
 
-    // If no user is registered
     if (!stored) {
       alert("No registered user found. Please register first.");
       return;
     }
 
-    // Parse the stored credentials
     const savedUser = JSON.parse(stored);
-
-    // Check if entered credentials match stored ones
-    if (username === savedUser.username && password === savedUser.password) {
-      // Save logged-in user info in localStorage
-      localStorage.setItem("user", JSON.stringify({ username }));
-      // Navigate to home page
+    if (email === savedUser.email && password === savedUser.password) {
+      localStorage.setItem("user", JSON.stringify({ email }));
       navigate("/home");
     } else {
-      // Show error if credentials are incorrect
-      alert("Invalid username or password. Try again.");
+      alert("Invalid email or password. Try again.");
     }
   };
 
+  const handleRegister = (e) => {
+    e.preventDefault();
+
+    if (!fullName || !email || !password || !confirmPassword) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    if (!agreeToTerms) {
+      alert("Please agree to the Terms of Service and Privacy Policy.");
+      return;
+    }
+
+    localStorage.setItem(
+      "userCredentials",
+      JSON.stringify({ fullName, email, password })
+    );
+    alert("Registration successful! Please log in.");
+    setIsLogin(true);
+  };
+
   return (
-    // Page background with image and center-aligned login form
     <div
       className="flex justify-center items-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('src/assets/f2.jpg')" }} 
+      style={{ backgroundImage: `url(${backgroundImage})` }}
     >
-      {/* Login form container */}
-      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm bg-opacity-90">
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-
-        {/* Login form */}
-        <form onSubmit={handleLogin} className="space-y-4">
-          {/* Username input */}
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-
-          {/* Password input */}
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-
-          {/* Submit button */}
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
-          >
-            Login
-          </button>
-        </form>
-
-        {/* Redirect to register link */}
-        <p className="text-center mt-4">
-          Don't have an account?{" "}
-          <a href="/register" className="text-blue-600 underline">
-            Register
-          </a>
+      <div className="bg-white/10 backdrop-blur-lg p-8 rounded-2xl shadow-2xl w-full max-w-md border border-white/20">
+        <h1 className="text-3xl font-bold text-white mb-2 text-center">
+          {isLogin ? "Welcome Back" : "Create Account"}
+        </h1>
+        <p className="text-white/80 mb-8 text-center">
+          {isLogin
+            ? "Enter your details to access your account"
+            : "Enter your details to create your account"}
         </p>
+
+        {isLogin ? (
+          <form onSubmit={handleLogin} className="space-y-6">
+            {/* Email */}
+            <div className="relative">
+              <input
+                type="email"
+                placeholder="Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
+                required
+              />
+            </div>
+
+            {/* Password */}
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full pl-10 pr-12 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <label className="flex items-center text-white/80 text-sm">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="mr-2 rounded border-white/20 bg-white/10 text-purple-600"
+                />
+                Remember me
+              </label>
+              <a href="#" className="text-white/80 text-sm hover:text-white">
+                Forgot password?
+              </a>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all"
+            >
+              Sign In
+            </button>
+
+            <p className="text-center mt-4 text-white/80">
+              Don't have an account?{" "}
+              <button
+                type="button"
+                onClick={() => setIsLogin(false)}
+                className="text-white hover:underline"
+              >
+                Create Account
+              </button>
+            </p>
+          </form>
+        ) : (
+          <form onSubmit={handleRegister} className="space-y-6">
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="w-full pl-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
+              required
+            />
+            <input
+              type="email"
+              placeholder="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full pl-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
+              required
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full pl-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
+              required
+            />
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full pl-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
+              required
+            />
+
+            <label className="flex items-start text-white/80 text-sm">
+              <input
+                type="checkbox"
+                checked={agreeToTerms}
+                onChange={(e) => setAgreeToTerms(e.target.checked)}
+                className="mr-2 mt-1 rounded border-white/20 bg-white/10 text-purple-600"
+                required
+              />
+              <span>
+                I agree to the <a href="#" className="hover:underline">Terms</a> and{" "}
+                <a href="#" className="hover:underline">Privacy Policy</a>
+              </span>
+            </label>
+
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all"
+            >
+              Create Account
+            </button>
+
+            <p className="text-center mt-4 text-white/80">
+              Already have an account?{" "}
+              <button
+                type="button"
+                onClick={() => setIsLogin(true)}
+                className="text-white hover:underline"
+              >
+                Sign In
+              </button>
+            </p>
+          </form>
+        )}
       </div>
     </div>
   );

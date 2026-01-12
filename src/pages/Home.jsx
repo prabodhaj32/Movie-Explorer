@@ -23,13 +23,15 @@ import {
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import ViewQuiltIcon from '@mui/icons-material/ViewQuilt';
+import SearchIcon from '@mui/icons-material/Search';
+import LayersIcon from '@mui/icons-material/Layers';
 import InfiniteScroll from "react-infinite-scroll-component";
 import SearchBar from "../components/SearchBar";
 import MovieCard from "../components/MovieCard";
 import MovieListItem from "../components/MovieListItem";
 import { MovieContext } from "../context/MovieContext"; 
 
-const Home = () => {
+const Home = ({ darkMode = false }) => {
   // Extract state and actions from MovieContext
   const {
     movies,
@@ -42,6 +44,7 @@ const Home = () => {
   } = useContext(MovieContext);
 
   const [viewMode, setViewMode] = useState('grid'); // 'grid', 'list', 'compact'
+  const [searchVariant, setSearchVariant] = useState('rounded');
   const [sortOption, setSortOption] = useState('popularity');
   const [minRating, setMinRating] = useState(0);
   const [language, setLanguage] = useState('all');
@@ -87,6 +90,21 @@ const Home = () => {
     return { total, avgRating, topRated };
   }, [processedMovies]);
 
+  const isDark = Boolean(darkMode);
+
+  const colors = {
+    rootBg: isDark
+      ? 'radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.15) 0%, transparent 50%), radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%), linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)'
+      : 'radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.06) 0%, transparent 60%), radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.05) 0%, transparent 60%), linear-gradient(135deg, #ffffff 0%, #f3f0ff 50%, #fff7ed 100%)',
+    subtitle: isDark ? '#cbd5e1' : '#374151',
+    paperBg: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0,0,0,0.04)',
+    paperBorder: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0,0,0,0.08)',
+    backdrop: isDark ? 'blur(20px)' : 'blur(6px)',
+    divider: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
+    controlText: isDark ? '#cbd5e1' : '#374151',
+    sliderColor: isDark ? '#a855f7' : '#6d28d9',
+  };
+
   return (
     <>
       <style>
@@ -99,7 +117,7 @@ const Home = () => {
       </style>
     <Box sx={{
       minHeight: '100vh',
-      background: 'radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.15) 0%, transparent 50%), radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%), linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)',
+      background: colors.rootBg,
       py: 4,
       px: { xs: 1, sm: 2 }
     }}>
@@ -129,7 +147,7 @@ const Home = () => {
                 variant="h5"
                 sx={{
                   mb: 4,
-                  color: '#cbd5e1',
+                  color: colors.subtitle,
                   fontSize: { xs: '1.1rem', md: '1.3rem' },
                   maxWidth: 600,
                   mx: 'auto'
@@ -146,13 +164,31 @@ const Home = () => {
                   maxWidth: 700,
                   mx: 'auto',
                   borderRadius: 4,
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  backdropFilter: 'blur(20px)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                  background: colors.paperBg,
+                  backdropFilter: colors.backdrop,
+                  border: colors.paperBorder,
+                  boxShadow: isDark ? '0 8px 32px 0 rgba(31, 38, 135, 0.37)' : '0 4px 12px rgba(15,23,42,0.04)',
                 }}
               >
-                <SearchBar />
+                <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexDirection: { xs: 'column', sm: 'row' } }}>
+                  <Box sx={{ flex: 1, width: '100%' }}>
+                    <SearchBar darkMode={darkMode} variant={searchVariant} />
+                  </Box>
+                  <ToggleButtonGroup
+                    value={searchVariant}
+                    exclusive
+                    onChange={(_, val) => val && setSearchVariant(val)}
+                    size="small"
+                    sx={{ mt: { xs: 1, sm: 0 } }}
+                  >
+                    <ToggleButton value="rounded" aria-label="rounded">
+                      <SearchIcon fontSize="small" />
+                    </ToggleButton>
+                    <ToggleButton value="glass" aria-label="glass">
+                      <LayersIcon fontSize="small" />
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+                </Box>
               </Paper>
             </Box>
           </Fade>
@@ -168,16 +204,18 @@ const Home = () => {
                   sx={{
                     p: 2,
                     textAlign: 'center',
-                    background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%)',
+                    background: isDark
+                      ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%)'
+                      : 'linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.06) 100%)',
                     backdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    border: colors.paperBorder,
                     borderRadius: 3,
                   }}
                 >
                   <Typography variant="h4" sx={{ color: '#a78bfa', fontWeight: 'bold' }}>
                     {stats.total}
                   </Typography>
-                  <Typography variant="body2" sx={{ color: '#cbd5e1' }}>
+                  <Typography variant="body2" sx={{ color: colors.subtitle }}>
                     Movies Found
                   </Typography>
                 </Paper>
@@ -188,16 +226,18 @@ const Home = () => {
                   sx={{
                     p: 2,
                     textAlign: 'center',
-                    background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(219, 39, 119, 0.2) 100%)',
+                    background: isDark
+                      ? 'linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(219, 39, 119, 0.2) 100%)'
+                      : 'linear-gradient(135deg, rgba(236, 72, 153, 0.06) 0%, rgba(219, 39, 119, 0.06) 100%)',
                     backdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    border: colors.paperBorder,
                     borderRadius: 3,
                   }}
                 >
                   <Typography variant="h4" sx={{ color: '#f472b6', fontWeight: 'bold' }}>
                     ⭐ {stats.avgRating}
                   </Typography>
-                  <Typography variant="body2" sx={{ color: '#cbd5e1' }}>
+                  <Typography variant="body2" sx={{ color: colors.subtitle }}>
                     Average Rating
                   </Typography>
                 </Paper>
@@ -208,16 +248,18 @@ const Home = () => {
                   sx={{
                     p: 2,
                     textAlign: 'center',
-                    background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%)',
+                    background: isDark
+                      ? 'linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%)'
+                      : 'linear-gradient(135deg, rgba(59, 130, 246, 0.06) 0%, rgba(37, 99, 235, 0.06) 100%)',
                     backdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    border: colors.paperBorder,
                     borderRadius: 3,
                   }}
                 >
                   <Typography variant="h4" sx={{ color: '#60a5fa', fontWeight: 'bold' }}>
                     {stats.topRated}
                   </Typography>
-                  <Typography variant="body2" sx={{ color: '#cbd5e1' }}>
+                  <Typography variant="body2" sx={{ color: colors.subtitle }}>
                     Top Rated (8+)
                   </Typography>
                 </Paper>
@@ -226,7 +268,7 @@ const Home = () => {
           </Fade>
         )}
 
-        <Divider sx={{ mb: 4, borderColor: 'rgba(255,255,255,0.08)' }} />
+        <Divider sx={{ mb: 4, borderColor: colors.divider }} />
 
         {/* Content Section */}
         <Box>
@@ -238,7 +280,7 @@ const Home = () => {
                 sx={{
                   fontWeight: 'bold',
                   mb: 2,
-                  color: '#e5e7eb'
+                  color: colors.controlText
                 }}
               >
                 {searchQuery ? "🔍 Search Results" : "🔥 Trending Movies"}
@@ -265,30 +307,30 @@ const Home = () => {
                   display: 'flex',
                   gap: 2,
                   alignItems: 'center',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  background: colors.paperBg,
+                  backdropFilter: colors.backdrop,
+                  border: colors.paperBorder,
                   borderRadius: 3,
                   flexWrap: 'wrap',
                 }}
               >
                 <FormControl size="small" sx={{ minWidth: 160 }}>
-                  <InputLabel id="sort-label" sx={{ color: '#cbd5e1' }}>Sort by</InputLabel>
+                  <InputLabel id="sort-label" sx={{ color: colors.controlText }}>Sort by</InputLabel>
                   <Select
                     labelId="sort-label"
                     value={sortOption}
                     label="Sort by"
                     onChange={(e) => setSortOption(e.target.value)}
                     sx={{
-                      color: '#fff',
+                      color: isDark ? '#fff' : '#111827',
                       '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'rgba(255, 255, 255, 0.2)',
+                        borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0,0,0,0.08)',
                       },
                       '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'rgba(255, 255, 255, 0.3)',
+                        borderColor: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0,0,0,0.12)',
                       },
                       '& .MuiSvgIcon-root': {
-                        color: '#cbd5e1',
+                        color: colors.controlText,
                       },
                     }}
                   >
@@ -299,22 +341,22 @@ const Home = () => {
                 </FormControl>
 
                 <FormControl size="small" sx={{ minWidth: 140 }}>
-                  <InputLabel id="language-label" sx={{ color: '#cbd5e1' }}>Language</InputLabel>
+                  <InputLabel id="language-label" sx={{ color: colors.controlText }}>Language</InputLabel>
                   <Select
                     labelId="language-label"
                     value={language}
                     label="Language"
                     onChange={(e) => setLanguage(e.target.value)}
                     sx={{
-                      color: '#fff',
+                      color: isDark ? '#fff' : '#111827',
                       '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'rgba(255, 255, 255, 0.2)',
+                        borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0,0,0,0.08)',
                       },
                       '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'rgba(255, 255, 255, 0.3)',
+                        borderColor: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0,0,0,0.12)',
                       },
                       '& .MuiSvgIcon-root': {
-                        color: '#cbd5e1',
+                        color: colors.controlText,
                       },
                     }}
                   >
@@ -327,7 +369,7 @@ const Home = () => {
                 </FormControl>
 
                 <Box sx={{ width: 200 }}>
-                  <Typography variant="body2" sx={{ color: '#cbd5e1', mb: 0.5, fontSize: '0.75rem' }}>
+                  <Typography variant="body2" sx={{ color: colors.controlText, mb: 0.5, fontSize: '0.75rem' }}>
                     Min Rating: {minRating}+
                   </Typography>
                   <Slider
@@ -339,7 +381,7 @@ const Home = () => {
                     step={1}
                     marks={[0, 5, 10].map(v => ({ value: v }))}
                     sx={{
-                      color: '#a855f7',
+                      color: colors.sliderColor,
                       '& .MuiSlider-thumb': {
                         '&:hover': {
                           boxShadow: '0 0 0 8px rgba(168, 85, 247, 0.16)',
@@ -349,15 +391,15 @@ const Home = () => {
                   />
                 </Box>
 
-                <ToggleButtonGroup
+                  <ToggleButtonGroup
                   exclusive
                   value={viewMode}
                   onChange={(_, val) => val && setViewMode(val)}
                   size="small"
                   sx={{
                     '& .MuiToggleButton-root': {
-                      color: '#cbd5e1',
-                      borderColor: 'rgba(255, 255, 255, 0.2)',
+                      color: colors.controlText,
+                      borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0,0,0,0.12)',
                       '&.Mui-selected': {
                         backgroundColor: 'rgba(168, 85, 247, 0.3)',
                         color: '#fff',
@@ -423,13 +465,13 @@ const Home = () => {
                 thickness={4}
                 sx={{
                   mb: 3,
-                  color: '#a855f7'
+                  color: colors.sliderColor
                 }}
               />
               <Typography
                 variant="h5"
                 sx={{
-                  color: '#e5e7eb',
+                  color: colors.controlText,
                   fontWeight: 'medium'
                 }}
               >
@@ -438,7 +480,7 @@ const Home = () => {
               <Typography
                 variant="body1"
                 sx={{
-                  color: '#cbd5e1',
+                  color: colors.subtitle,
                   mt: 1
                 }}
               >
@@ -454,38 +496,38 @@ const Home = () => {
               next={fetchMore}
               hasMore={hasMore}
               scrollThreshold={0.95}
-              loader={
+                loader={
                 <Box sx={{
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   py: 6
                 }}>
-                  <CircularProgress size={50} sx={{ mb: 2, color: '#a855f7' }} />
-                  <Typography variant="body1" sx={{ color: '#cbd5e1' }}>
+                  <CircularProgress size={50} sx={{ mb: 2, color: colors.sliderColor }} />
+                  <Typography variant="body1" sx={{ color: colors.subtitle }}>
                     Loading more movies...
                   </Typography>
                 </Box>
               }
-              endMessage={
+                endMessage={
                 <Paper
                   elevation={4}
                   sx={{
                     p: 4,
                     mt: 4,
                     textAlign: 'center',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    backdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: colors.paperBg,
+                    backdropFilter: colors.backdrop,
+                    border: colors.paperBorder,
                     borderRadius: 3,
                     maxWidth: 500,
                     mx: 'auto'
                   }}
                 >
-                  <Typography variant="h5" sx={{ mb: 1, fontWeight: 'bold', color: '#fff' }}>
+                  <Typography variant="h5" sx={{ mb: 1, fontWeight: 'bold', color: isDark ? '#fff' : '#111827' }}>
                     🎉 You've reached the end!
                   </Typography>
-                  <Typography variant="body1" sx={{ color: '#cbd5e1' }}>
+                  <Typography variant="body1" sx={{ color: colors.subtitle }}>
                     No more movies to load at the moment. Check back later for new content!
                   </Typography>
                 </Paper>
